@@ -16,3 +16,6 @@ class Queue:
 
     def push(self, item):
         self.in_stack.append(item)
+    
+    def size(self):
+        return len(self.in_stack) + len(self.out_stack)

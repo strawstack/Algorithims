@@ -5,6 +5,8 @@ from getData import binaryTree
 from treeTraversal import TreeTraversal
 from breadthFirstSearch import BreadthFirstSearch
 from depthFirstSearch import DepthFirstSearch
+from heap import * # Heap, HeapWithDecreaseKey
+from dijkstrasShortestPath import * # DijkstrasShortestPath, DijkstrasShortestPathWithDecreaseKey
 
 #
 # binarySearch
@@ -137,7 +139,104 @@ for i in range(len(checkList)):
 # heap
 #
 
+h = Heap()
 
+h.pushItem(7)
+h.pushItem(1)
+h.pushItem(5)
+h.pushItem(6)
+h.pushItem(10)
+h.pushItem(4)
+h.pushItem(3)
+
+ans = []
+while len(h.lst) > 0:
+    item = h.popItem()
+    ans.append(item)
+
+checkList = [1, 3, 4, 5, 6, 7, 10]
+if ans != checkList:
+    print("heap: FAIL")
+
+#
+# heapWithDecreaseKey
+#
+
+def HeapWithDecreaseKey_compareItems(a, b):
+    return a[0] < b[0]
+
+def HeapWithDecreaseKey_hashItem(a):
+    return a[1]
+
+h = HeapWithDecreaseKey(HeapWithDecreaseKey_compareItems, HeapWithDecreaseKey_hashItem)
+
+h.pushItem([7, 111])
+h.pushItem([1, 222])
+h.pushItem([5, 333])
+h.pushItem([6, 444])
+
+def HeapWithDecreaseKey_itemChangeFunction(oldItem):
+    newItem = [
+        oldItem[0] - 5,
+        oldItem[1]
+    ]
+    return newItem
+
+h.decreaseKey(333, HeapWithDecreaseKey_itemChangeFunction)
+
+ans = []
+while len(h.lst) > 0:
+    item = h.popItem()
+    ans.append(item)
+
+checkList = [[0, 333], [1, 222], [6, 444], [7, 111]]
+
+for i in range(len(checkList)):
+    if ans[i][0] != checkList[i][0] or ans[i][1] != checkList[i][1]:
+        print("heapWithDecreaseKey: FAIL")
+        break
+
+#
+# dijkstrasShortestPath
+#
+testGraph = [
+    [],                                 # 0
+    [[2, 7], [3, 9], [6, 14]],          # 1
+    [[1, 7], [3, 10], [4, 15]],         # 2
+    [[1, 9], [2, 10], [4, 11], [6, 2]], # 3
+    [[2, 15], [3, 11], [5, 6]],         # 4
+    [[4, 6], [6, 9]],                   # 5
+    [[1, 14], [3, 2], [5, 9]]           # 6
+]
+
+dijk = DijkstrasShortestPath()
+path = dijk.findPath(1, 5, testGraph)
+
+checkList = [1, 3, 6, 5]
+
+if path != checkList:
+    print("dijkstrasShortestPath: FAIL")
+
+#
+# dijkstrasShortestPathWithDecreaseKey
+#
+testGraph = [
+    [],                                 # 0
+    [[2, 7], [3, 9], [6, 14]],          # 1
+    [[1, 7], [3, 10], [4, 15]],         # 2
+    [[1, 9], [2, 10], [4, 11], [6, 2]], # 3
+    [[2, 15], [3, 11], [5, 6]],         # 4
+    [[4, 6], [6, 9]],                   # 5
+    [[1, 14], [3, 2], [5, 9]]           # 6
+]
+
+dijk = DijkstrasShortestPathWithDecreaseKey()
+path = dijk.findPath(1, 5, testGraph)
+
+checkList = [1, 3, 6, 5]
+
+if path != checkList:
+    print("dijkstrasShortestPath: FAIL")
 
 # tests complete
 print("testing complete.")
